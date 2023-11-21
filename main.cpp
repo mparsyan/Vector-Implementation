@@ -1,6 +1,40 @@
 #include "vector.hpp"
 
-int main() {
+int main() 
+{
+    // Default constructor
+    Vector<int> myVector1;
+
+    // Parameterized constructor
+    Vector<int> myVector2(5, 10); // Creates a vector with size 5 and capacity 10
+
+    // Initializer list constructor
+    Vector<int> myVector3 = {1, 2, 3, 4, 5};
+
+    // Copy constructor
+    Vector<int> myVector4 = myVector3;
+
+    // Move constructor
+    Vector<int> myVector5 = std::move(myVector4);
+
+    // Output stream operator
+    std::cout << "myVector5: " << myVector5 << std::endl;
+
+    // Subscript operator
+    int element = myVector5[2];
+    std::cout << "Element at index 2: " << element << std::endl;
+
+    // Copy assignment operator
+    Vector<int> myVector6;
+    myVector6 = myVector5;
+
+    // Move assignment operator
+    Vector<int> myVector7;
+    myVector7 = std::move(myVector6);
+
+    // Output stream operator
+    std::cout << "myVector7: " << myVector7 << std::endl;
+
     // Example usage of Vector class
     Vector<int> myVector;
 

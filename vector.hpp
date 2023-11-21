@@ -8,7 +8,15 @@ class Vector
 {
 public:
     Vector();
+    Vector(size_t size, size_t capacity);
+    Vector(std::initializer_list<T> list);
+    Vector(const Vector& other);
+    Vector(Vector&& other);
     ~Vector();
+
+    Vector& operator=(const Vector& other);
+    Vector& operator=(Vector&& other);
+    T& operator[](int index) const;
 
 public:
 size_t size() const;
@@ -37,6 +45,9 @@ private:
     size_t m_size;
     size_t m_capacity;
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Vector<T>& obj);
 
 #include "vector_impl.hpp"
 

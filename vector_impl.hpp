@@ -1,6 +1,6 @@
 #include "vector.hpp"
 
-// Constructor
+// Default constructor
 template <typename T>
 Vector<T>::Vector() 
 {
@@ -8,6 +8,59 @@ Vector<T>::Vector()
     m_size = 0;
     m_capacity = 0;
 }
+
+// Parameterized constructor
+template <typename T>
+Vector<T>::Vector(size_t size, size_t capacity)
+    : m_size(size)
+    , m_capacity(capacity)
+    {
+        m_ptr = new T[m_capacity];
+    }
+
+// Initializer list constructor
+template <typename T>
+Vector<T>::Vector(std::initializer_list<T> list)
+    : m_size(list.size())
+    , m_capacity(m_size)
+    {
+        m_ptr = new T[m_capacity];
+
+        // Copy elements from the initializer list to the vector
+        if (m_size > 0)
+        {
+            auto it = list.begin();
+            for (size_t i = 0; i < m_size; ++i, ++it)
+            {
+                m_ptr[i] = *it;
+            }
+        }
+    }
+
+// Copy constructor
+template <typename T>
+Vector<T>::Vector(const Vector& other)
+    : m_size(other.m_size)
+    , m_capacity(other.m_capacity)
+    {
+        m_ptr = new T[m_capacity];
+        for (size_t i = 0; i < m_size; ++i)
+        {
+            m_ptr[i] = other.m_ptr[i];
+        }
+    }
+
+// Move constructor
+template <typename T>
+Vector<T>::Vector(Vector&& other)
+    : m_ptr(other.m_ptr)
+    , m_size(other.m_size)
+    , m_capacity(other.m_capacity)
+    {
+        other.m_ptr = nullptr;
+        other.m_size = 0;
+        other.m_capacity = 0;
+    }
 
 // Destructor
 template <typename T>
@@ -17,6 +70,68 @@ Vector<T>::~Vector()
     {
         delete[] m_ptr;
     }
+}
+
+// Copy assignment operator
+template <typename T>
+Vector<T>& Vector<T>::operator=(const Vector& other)    
+{
+    if (this != &other)
+    {
+        delete[] m_ptr;
+        m_capacity = other.m_capacity;
+        m_size = other.m_size;
+        m_ptr = new T[m_capacity];
+        for (size_t i = 0; i < m_size; ++i)
+        {
+            m_ptr[i] = other.m_ptr[i];
+        }
+    }
+    return *this;
+}
+
+// Move assignment operator
+template <typename T>
+Vector<T>& Vector<T>::operator=(Vector&& other)     
+{
+    if (this != &other) 
+    {
+        delete[] m_ptr;
+        m_capacity = other.m_capacity;
+        m_size = other.m_size;
+        m_ptr = other.m_ptr;
+        other.m_capacity = 0;
+        other.m_size = 0;
+        other.m_ptr = nullptr;
+    }
+    return *this;
+}
+
+// Subscript operator
+template <typename T>
+T& Vector<T>::operator[](int index) const
+{
+    if (index < 0 || index >= m_size)
+    {
+        std::cerr << "Please input a valid index!" << std::endl;
+        throw std::out_of_range("Invalid index");
+    }
+    return m_ptr[index];
+}
+
+// Output stream operator
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Vector<T>& obj) 
+{
+    for (size_t i = 0; i < obj.size(); ++i)
+    {
+        os << obj[i];
+        if (i < obj.size() - 1)
+        {
+            os << " ";
+        }
+    }
+    return os;
 }
 
 // Function to get the current size of the vector
